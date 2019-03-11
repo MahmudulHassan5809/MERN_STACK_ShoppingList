@@ -1,15 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 const path = require('path');
+const config = require('config')
 
 const items = require('./routes/api/items');
-
+const users = require('./routes/api/users');
+const auth = require('./routes/api/auth');
 
 const app = express();
 
 //Body parser
-app.use(bodyParser.json());
+app.use(express.json());
 
 
 // DB Config
@@ -17,7 +19,10 @@ const db = require('./config/keys').mongoURI
 
 //Connect to Mongo
 mongoose
-	.connect(db)
+	.connect(db,{
+		useNewUrlParser: true,
+		useCreateIndex: true
+	})
 	.then(() => console.log('Mongo DB Connected'))
 	.catch(err => console.log(err));
 
@@ -25,6 +30,8 @@ mongoose
 
 //Use Routes
 app.use('/api/items',items);
+app.use('/api/users',users);
+app.use('/api/auth',auth);
 
 //Serve Static assets if in Production
 if(process.env.NODE_ENV === 'production'){

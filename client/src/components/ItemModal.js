@@ -46,10 +46,11 @@ class ItemModal extends Component {
 	render() {
 		return (
 			<div>
-				<Button
+				{this.props.isAuthenticated ? <Button
 				color="dark"
 				style={{marginBottom : '2rem'}}
-				onClick={this.toggle}>Add Item</Button>
+				onClick={this.toggle}>Add Item</Button> : <h4 className='mb-3 mr-4'>Please Login To Manage Items</h4>}
+
 				<Modal
 				isOpen={this.state.modal}
 				toggle={this.toggle} >
@@ -83,12 +84,14 @@ class ItemModal extends Component {
 
 ItemModal.propTypes = {
   addItem: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 }
 
 
-// const mapStateToProps = (state) => ({
-// 	item: state.item
-// });
+const mapStateToProps = (state) => ({
+	item: state.item,
+	isAuthenticated: state.auth.isAuthenticated
+});
 
-export default connect(null,{addItem})(ItemModal)
+export default connect(mapStateToProps,{addItem})(ItemModal)
 
